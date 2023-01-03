@@ -25,8 +25,8 @@
     };
 
     /**
-     * 4 Cases:
-     *  Start of Text 
+     * Convert Search Term into a Regex to remove 
+     * inclusivity of matching (ex. "the" should not match "then")
      */
     const searchTermRE =  new RegExp(
         "[\\W]" + searchTerm + "[\\W]|" +
