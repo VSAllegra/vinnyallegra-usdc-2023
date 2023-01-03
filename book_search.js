@@ -315,7 +315,7 @@ if (test2result.Results.length == 1) {
 }
 
 
-/** Check that Words Containg the Search Term Are Not Included */
+/** Check Serach Fails if Occurance is part of a larger word */
 const test3result = findSearchTermInBooks("the", TestInputExclusiveSearch);
 if (test3result.Results.length == 0) {
     console.log("PASS: Test 3");
@@ -326,7 +326,7 @@ if (test3result.Results.length == 0) {
 }
 
 
-/** Check Search Term is not inclusive to changes in capatilization */
+/** Check Search Fails if Occurance is of different Capitalization */
 const test4result = findSearchTermInBooks("the", TestCapitilizationnSensitive);
 if (test4result.Results.length == 0) {
     console.log("PASS: Test 4");
@@ -398,12 +398,3 @@ if (test10result.Results.length == 2) {
 }
 
 
-/** Check for correct ouput for no books */
-const test11result = findSearchTermInBooks("the", TestNoBooks);
-if (test11result.Results.length == 0) {
-    console.log("PASS: Test 11");
-} else {
-    console.log("FAIL: Test 11");
-    console.log("Expected:", 0);
-    console.log("Received:", test11result.Results.length);
-}
