@@ -24,6 +24,11 @@
         "Results": []
     };
 
+    const searchTermRE =  new RegExp(
+        "[\\W]" + searchTerm + "[\\W]|^" + searchTerm 
+        + "[\\W]|[\\W]" + searchTerm + "$|^" + searchTerm + "$"
+        )
+
     
     for (let i = 0; i < scannedTextObj.length; i++){
         let book = scannedTextObj[i];
@@ -31,11 +36,7 @@
 
         /** Apply SearchTerm Matching Function */
         content.map(function(entry){
-            let containsSearchTerm = entry.Text.replace(
-                /\W/g, ''
-            ).includes(searchTerm);
-
-
+            let containsSearchTerm = entry.Text.match(searchTermRE);
             /** Only Include Results Containing a Match */
             if(containsSearchTerm){
                 result.Results.push({
@@ -122,7 +123,7 @@ const TestInputExclusiveSearch = [
  * */
 
 /** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("ness", twentyLeaguesIn);
+const test1result = findSearchTermInBooks("The", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("PASS: Test 1");
 } else {
@@ -142,16 +143,18 @@ if (test2result.Results.length == 1) {
 }
 
 
-/** Check that Words Containg the Search Term Are Not Included
- *      Success: "then" is not accepted when Search Term is "the"
- */
+/** Check that Words Containg the Search Term Are Not Included */
 
+/** Check Search Term is not inclusive to changes in capatilization */
 
-/** Check Occurances in multiple Books 
- *     Success: "the" is found within seperate books
- */
+/** Check Search Works when occuring on first or last element of text */
 
+/** Check Search Works when SearchTerm is preceded by punctuation */
 
-/** 
- * 
- */
+/** Check Search Works when SearchTerm is followed by punctuation */
+
+/** Check Occurances in multiple Books */
+
+/** Check Multiple Occurances in Same Content */
+
+/** Check for correct ouput for no matches */
