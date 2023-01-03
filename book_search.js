@@ -25,19 +25,16 @@
     };
 
     
-
-    /** Modify SearchTerm to be exclusive when matching */
-    modifiedSearchTerm = " " + searchTerm + " "
-    
     for (let i = 0; i < scannedTextObj.length; i++){
         let book = scannedTextObj[i];
         let content = book.Content;
 
-        /** Apply Search Term Matching Function */
+        /** Apply SearchTerm Matching Function */
         content.map(function(entry){
-            let containsSearchTerm = entry.Text.includes(
-                modifiedSearchTerm
-            );
+            let containsSearchTerm = entry.Text.replace(
+                /\W/g, ''
+            ).includes(searchTerm);
+
 
             /** Only Include Results Containing a Match */
             if(containsSearchTerm){
@@ -91,6 +88,22 @@ const twentyLeaguesOut = {
 }
 
 
+//------------------------------------------------
+
+const TestInputExclusiveSearch = [
+    {
+        "Title" : "Test for Exclusive Searching",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "then I ate a burger."
+            },
+        ]
+    }
+]
+
 
 /*
  _   _ _   _ ___ _____   _____ _____ ____ _____ ____  
@@ -109,7 +122,7 @@ const twentyLeaguesOut = {
  * */
 
 /** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
+const test1result = findSearchTermInBooks("ness", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("PASS: Test 1");
 } else {
@@ -127,3 +140,18 @@ if (test2result.Results.length == 1) {
     console.log("Expected:", twentyLeaguesOut.Results.length);
     console.log("Received:", test2result.Results.length);
 }
+
+
+/** Check that Words Containg the Search Term Are Not Included
+ *      Success: "then" is not accepted when Search Term is "the"
+ */
+
+
+/** Check Occurances in multiple Books 
+ *     Success: "the" is found within seperate books
+ */
+
+
+/** 
+ * 
+ */
