@@ -19,18 +19,36 @@
  * @returns {JSON} - Search results.
  * */ 
  function findSearchTermInBooks(searchTerm, scannedTextObj) {
-    /** Process:
-     *    Iterate Through Each text in scannedTextObj
-     *          Check if Content of Text's Line contains 
-     *          the searchTerm
-     *              Yes: add entry to results 
-     *              No: Continue to next entry
-     */
-
     var result = {
         "SearchTerm": searchTerm,
         "Results": []
     };
+
+    
+
+    /** Modify SearchTerm to be exclusive when matching */
+    modifiedSearchTerm = " " + searchTerm + " "
+    
+    for (let i = 0; i < scannedTextObj.length; i++){
+        let book = scannedTextObj[i];
+        let content = book.Content;
+
+        /** Apply Search Term Matching Function */
+        content.map(function(entry){
+            let containsSearchTerm = entry.Text.includes(
+                modifiedSearchTerm
+            );
+
+            /** Only Include Results Containing a Match */
+            if(containsSearchTerm){
+                result.Results.push({
+                    ISBN: book.ISBN,
+                    Page: entry.Page,
+                    Line: entry.Line,
+                });
+            };
+        });
+    }
 
     return result; 
 }
