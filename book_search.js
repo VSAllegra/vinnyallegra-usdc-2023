@@ -88,7 +88,6 @@ const twentyLeaguesOut = {
     ]
 }
 
-
 //------------------------------------------------
 
 const TestInputExclusiveSearch = [
@@ -99,11 +98,184 @@ const TestInputExclusiveSearch = [
             {
                 "Page": 31,
                 "Line": 8,
-                "Text": "then I ate a burger."
+                "Text": "I drank then I ate a burger."
             },
         ]
     }
 ]
+
+const TestCapitilizationnSensitive = [
+    {
+        "Title" : "Test for Exclusive Searching",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "over The moon"
+            },
+        ]
+    }
+]
+
+const TestFirstElement = [
+    {
+        "Title" : "Test for First Element",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "the milk went bad"
+            },
+        ]
+    }   
+]
+
+const TestLastElement = [
+    {
+        "Title" : "Test for Last Element",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "eating potato the"
+            },
+        ]
+    }   
+]
+
+const TestPrecedingPunctuation = [
+    {
+        "Title" : "Test for Preceding Punctuation",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "Hello.the barn"
+            },
+            {
+                "Page": 32,
+                "Line": 8,
+                "Text": "Hello?the barn"
+            },
+            {
+                "Page": 33,
+                "Line": 8,
+                "Text": "Hello!the barn"
+            },
+            {
+                "Page": 34,
+                "Line": 8,
+                "Text": "Hello;the barn"
+            },
+            {
+                "Page": 35,
+                "Line": 8,
+                "Text": "Hello,the barn"
+            },
+            {
+                "Page": 36,
+                "Line": 8,
+                "Text": "Hello)the barn"
+            },
+        ]
+    }   
+
+]
+
+const TestFollowingPunctuation = [
+    {
+        "Title" : "Test for Following Punctuation",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "Hello the. barn"
+            },
+            {
+                "Page": 32,
+                "Line": 8,
+                "Text": "Hello the? barn"
+            },
+            {
+                "Page": 33,
+                "Line": 8,
+                "Text": "Hello the! barn"
+            },
+            {
+                "Page": 34,
+                "Line": 8,
+                "Text": "Hello the; barn"
+            },
+            {
+                "Page": 35,
+                "Line": 8,
+                "Text": "Hello the, barn"
+            },
+            {
+                "Page": 36,
+                "Line": 8,
+                "Text": "Hello the) barn"
+            },
+        ]
+        
+    }   
+]
+
+const TestMultipleBooks = [
+    {
+        "Title" : "Test Book 1",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "close the door"
+            },
+        ]
+        
+    },
+    {
+        "Title" : "Test Book 2",
+        "ISBN"  : "8780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "open the door"
+            },
+        ]
+        
+    }   
+]
+
+const TestMultipleOccurancesInContent = [
+    {
+        "Title" : "Test Multiple Occurances in Content",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "close the door"
+            },
+            {
+                "Page": 23,
+                "Line": 2,
+                "Text": "open the door"
+            },
+        ]
+    },
+]
+
+const TestNoBooks =  []
+
+
+
 
 
 /*
@@ -123,7 +295,7 @@ const TestInputExclusiveSearch = [
  * */
 
 /** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("The", twentyLeaguesIn);
+const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("PASS: Test 1");
 } else {
@@ -144,17 +316,94 @@ if (test2result.Results.length == 1) {
 
 
 /** Check that Words Containg the Search Term Are Not Included */
+const test3result = findSearchTermInBooks("the", TestInputExclusiveSearch);
+if (test3result.Results.length == 0) {
+    console.log("PASS: Test 3");
+} else {
+    console.log("FAIL: Test 3");
+    console.log("Expected:", 0);
+    console.log("Received:", test3result.Results.length);
+}
+
 
 /** Check Search Term is not inclusive to changes in capatilization */
+const test4result = findSearchTermInBooks("the", TestCapitilizationnSensitive);
+if (test4result.Results.length == 0) {
+    console.log("PASS: Test 4");
+} else {
+    console.log("FAIL: Test 4");
+    console.log("Expected:", 0);
+    console.log("Received:", test4result.Results.length);
+}
 
-/** Check Search Works when occuring on first or last element of text */
+/** Check Search Works when occuring on first element of text */
+const test5result = findSearchTermInBooks("the", TestFirstElement);
+if (test5result.Results.length == 1) {
+    console.log("PASS: Test 5");
+} else {
+    console.log("FAIL: Test 5");
+    console.log("Expected:", 1);
+    console.log("Received:", test5result.Results.length);
+}
+
+/** Check Search Works when occuring on Last element of text */
+const test6result = findSearchTermInBooks("the", TestLastElement);
+if (test6result.Results.length == 1) {
+    console.log("PASS: Test 6");
+} else {
+    console.log("FAIL: Test 6");
+    console.log("Expected:", 1);
+    console.log("Received:", test6result.Results.length);
+}
 
 /** Check Search Works when SearchTerm is preceded by punctuation */
+const test7result = findSearchTermInBooks("the", TestPrecedingPunctuation);
+if (test7result.Results.length == 6) {
+    console.log("PASS: Test 7");
+} else {
+    console.log("FAIL: Test 7");
+    console.log("Expected:", 6);
+    console.log("Received:", test7result.Results.length);
+}
+
 
 /** Check Search Works when SearchTerm is followed by punctuation */
+const test8result = findSearchTermInBooks("the", TestFollowingPunctuation);
+if (test8result.Results.length == 6) {
+    console.log("PASS: Test 8");
+} else {
+    console.log("FAIL: Test 8");
+    console.log("Expected:", 6);
+    console.log("Received:", test8result.Results.length);
+}
 
 /** Check Occurances in multiple Books */
+const test9result = findSearchTermInBooks("the", TestMultipleBooks);
+if (test9result.Results.length == 2) {
+    console.log("PASS: Test 9");
+} else {
+    console.log("FAIL: Test 9");
+    console.log("Expected:", 2);
+    console.log("Received:", test9result.Results.length);
+}
 
 /** Check Multiple Occurances in Same Content */
+const test10result = findSearchTermInBooks("the", TestMultipleOccurancesInContent);
+if (test10result.Results.length == 2) {
+    console.log("PASS: Test 10");
+} else {
+    console.log("FAIL: Test 10");
+    console.log("Expected:", 2);
+    console.log("Received:", test10result.Results.length);
+}
 
-/** Check for correct ouput for no matches */
+
+/** Check for correct ouput for no books */
+const test11result = findSearchTermInBooks("the", TestNoBooks);
+if (test11result.Results.length == 0) {
+    console.log("PASS: Test 11");
+} else {
+    console.log("FAIL: Test 11");
+    console.log("Expected:", 0);
+    console.log("Received:", test11result.Results.length);
+}
