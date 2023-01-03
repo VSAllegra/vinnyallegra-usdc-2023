@@ -24,10 +24,16 @@
         "Results": []
     };
 
+    /**
+     * 4 Cases:
+     *  Start of Text 
+     */
     const searchTermRE =  new RegExp(
-        "[\\W]" + searchTerm + "[\\W]|^" + searchTerm 
-        + "[\\W]|[\\W]" + searchTerm + "$|^" + searchTerm + "$"
-        )
+        "[\\W]" + searchTerm + "[\\W]|" +
+        "^" + searchTerm + "[\\W]|" + 
+        "[\\W]" + searchTerm + "$|" +
+        "^" + searchTerm + "$"
+    )
 
     
     for (let i = 0; i < scannedTextObj.length; i++){
@@ -226,6 +232,21 @@ const TestFollowingPunctuation = [
     }   
 ]
 
+const TestOccuranceStartandEndTerm = [
+    {
+        "Title" : "Test Book 1",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "the"
+            },
+        ]
+        
+    }
+]
+
 const TestMultipleBooks = [
     {
         "Title" : "Test Book 1",
@@ -356,7 +377,7 @@ if (test6result.Results.length == 1) {
     console.log("Received:", test6result.Results.length);
 }
 
-/** Check Search Works when SearchTerm is preceded by punctuation */
+/** Check Search Works when Match is preceded by punctuation */
 const test7result = findSearchTermInBooks("the", TestPrecedingPunctuation);
 if (test7result.Results.length == 6) {
     console.log("PASS: Test 7");
@@ -367,7 +388,7 @@ if (test7result.Results.length == 6) {
 }
 
 
-/** Check Search Works when SearchTerm is followed by punctuation */
+/** Check Search Works when Match is followed by punctuation */
 const test8result = findSearchTermInBooks("the", TestFollowingPunctuation);
 if (test8result.Results.length == 6) {
     console.log("PASS: Test 8");
@@ -377,18 +398,18 @@ if (test8result.Results.length == 6) {
     console.log("Received:", test8result.Results.length);
 }
 
-/** Check Occurances in multiple Books */
-const test9result = findSearchTermInBooks("the", TestMultipleBooks);
-if (test9result.Results.length == 2) {
+/** Check Search Works when Match is both First and Last Element */
+const test9result = findSearchTermInBooks("the", TestOccuranceStartandEndTerm);
+if (test9result.Results.length == 1) {
     console.log("PASS: Test 9");
 } else {
     console.log("FAIL: Test 9");
-    console.log("Expected:", 2);
+    console.log("Expected:", 1);
     console.log("Received:", test9result.Results.length);
 }
 
-/** Check Multiple Occurances in Same Content */
-const test10result = findSearchTermInBooks("the", TestMultipleOccurancesInContent);
+/** Check Occurances in multiple Books */
+const test10result = findSearchTermInBooks("the", TestMultipleBooks);
 if (test10result.Results.length == 2) {
     console.log("PASS: Test 10");
 } else {
@@ -397,4 +418,23 @@ if (test10result.Results.length == 2) {
     console.log("Received:", test10result.Results.length);
 }
 
+/** Check Multiple Occurances in Same Content */
+const test11result = findSearchTermInBooks("the", TestMultipleOccurancesInContent);
+if (test11result.Results.length == 2) {
+    console.log("PASS: Test 11");
+} else {
+    console.log("FAIL: Test 11");
+    console.log("Expected:", 2);
+    console.log("Received:", test11result.Results.length);
+}
+
+/** Check Multiple Occurances in Same Content */
+const test12result = findSearchTermInBooks("the", TestNoBooks);
+if (test12result.Results.length == 0) {
+    console.log("PASS: Test 12");
+} else {
+    console.log("FAIL: Test 12");
+    console.log("Expected:", 0);
+    console.log("Received:", test12result.Results.length);
+}
 
