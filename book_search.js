@@ -19,14 +19,19 @@
  * @returns {JSON} - Search results.
  * */ 
  function findSearchTermInBooks(searchTerm, scannedTextObj) {
-    /** You will need to implement your search and 
-     * return the appropriate object here. */
+    /** Process:
+     *    Iterate Through Each text in scannedTextObj
+     *          Check if Content of Text's Line contains 
+     *          the searchTerm
+     *              Yes: add entry to results 
+     *              No: Continue to next entry
+     */
 
     var result = {
-        "SearchTerm": "",
+        "SearchTerm": searchTerm,
         "Results": []
     };
-    
+
     return result; 
 }
 
@@ -66,6 +71,8 @@ const twentyLeaguesOut = {
         }
     ]
 }
+
+
 
 /*
  _   _ _   _ ___ _____   _____ _____ ____ _____ ____  
