@@ -35,13 +35,16 @@
         "^" + searchTerm + "$"
     )
 
+    const endHeiphenatedRE = /\w*-$/
+    const startLineRE = /^\w*/
     
     for (let i = 0; i < scannedTextObj.length; i++){
         let book = scannedTextObj[i];
         let content = book.Content;
 
         /** Apply SearchTerm Matching Function */
-        content.map(function(entry){
+        for (let j= 0; j < content.length; j++){
+            let entry = content[j];
             let containsSearchTerm = entry.Text.match(searchTermRE);
             /** Only Include Results Containing a Match */
             if(containsSearchTerm){
@@ -50,8 +53,25 @@
                     Page: entry.Page,
                     Line: entry.Line,
                 });
-            };
-        });
+            } else {
+                let heiphenCheck = content[j].Text.match(endHeiphenatedRE)
+                if(heiphenCheck){
+                    if(j + 1 < content.length){
+                        let nextLine = content[
+                            j+1].Text.match(startLineRE);
+                        let combinedWord = heiphenCheck[0].replace("-", nextLine[0]);
+                        if(combinedWord == searchTerm){
+                            result.Results.push({
+                                ISBN: book.ISBN,
+                                Page: entry.Page,
+                                Line: entry.Line,
+                            });
+                        }
+                    }
+                }
+            }
+            
+        }
     }
 
     return result; 
@@ -316,7 +336,7 @@ const TestNoBooks =  []
  * */
 
 /** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
+const test1result = findSearchTermInBooks("darkness", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("PASS: Test 1");
 } else {
@@ -436,5 +456,15 @@ if (test12result.Results.length == 0) {
     console.log("FAIL: Test 12");
     console.log("Expected:", 0);
     console.log("Received:", test12result.Results.length);
+}
+
+/** Check Multiple Occurances in Same Content */
+const test13result = findSearchTermInBooks("the", TestNoBooks);
+if (test13result.SearchTerm == "the") {
+    console.log("PASS: Test 13");
+} else {
+    console.log("FAIL: Test 13");
+    console.log("Expected: the");
+    console.log("Received:", test13result.SearchTerm);
 }
 
