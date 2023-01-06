@@ -58,20 +58,24 @@
 
                 if(!heiphenCheck) continue;
 
-                /** The Completion of the Heiphen Expression Should be the start
-                * of the next line (next entry) in the conten */
+                /** The Completion of the Heiphen Expression 
+                 * Should be the start of the next line 
+                 * (next entry) in the conten */
                 if(j + 1 > content.length) continue;
 
                 let nextLine = content[
                     j+1].Text.match(startLineRE)
                     
-                /** A Heiphenated Expression should be followed by the completion of the
+                /** A Heiphenated Expression should be followed 
+                 * by the completion of the
                 * Expression on the next entry of the content*/
                 console.assert(nextLine.length > 0, 
                     "Word-Characters Missing Following Heiphenated Expression"); 
 
                 
-                let combinedWord = heiphenCheck[0].replace("-", nextLine[0]);
+                let combinedWord = heiphenCheck[0].replace(
+                    "-", nextLine[0]);
+
                 if(combinedWord == searchTerm){
                     result.Results.push({
                         ISBN: book.ISBN,
