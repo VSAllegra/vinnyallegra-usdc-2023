@@ -56,9 +56,14 @@
             } else {
                 let heiphenCheck = content[j].Text.match(endHeiphenatedRE)
                 if(heiphenCheck){
+                    /** Assume If there is a heiphen that book 
+                     * contents are sorted by line and then by page 
+                     * such that the next entry will be the continuation of the heiphen*/
                     if(j + 1 < content.length){
                         let nextLine = content[
                             j+1].Text.match(startLineRE);
+                        /** Replace the heiphen from the last line with the start of the next 
+                         * to make 1 word*/
                         let combinedWord = heiphenCheck[0].replace("-", nextLine[0]);
                         if(combinedWord == searchTerm){
                             result.Results.push({
@@ -316,6 +321,24 @@ const TestMultipleOccurancesInContent = [
 const TestNoBooks =  []
 
 
+const TestHeiphenatedBetweenTwoLines = [
+    {
+        "Title" : "Test Multiple Occurances in Content",
+        "ISBN"  : "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "close th-"
+            },
+            {
+                "Page": 31,
+                "Line": 9,
+                "Text": "e door"
+            },
+        ]
+    },
+]
 
 
 
@@ -336,7 +359,7 @@ const TestNoBooks =  []
  * */
 
 /** We can check that, given a known input, we get a known output. */
-const test1result = findSearchTermInBooks("darkness", twentyLeaguesIn);
+const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("PASS: Test 1");
 } else {
@@ -468,3 +491,12 @@ if (test13result.SearchTerm == "the") {
     console.log("Received:", test13result.SearchTerm);
 }
 
+/** Check Heiphenated across lines*/
+const test14result = findSearchTermInBooks("the", TestHeiphenatedBetweenTwoLines);
+if (test13result.SearchTerm == "the") {
+    console.log("PASS: Test 14");
+} else {
+    console.log("FAIL: Test 14");
+    console.log("Expected: the");
+    console.log("Received:", test14result.SearchTerm);
+}
