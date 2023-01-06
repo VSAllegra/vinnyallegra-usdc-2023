@@ -503,10 +503,10 @@ if (test13result.SearchTerm == "the") {
 
 /** Check Heiphenated across lines*/
 const test14result = findSearchTermInBooks("the", TestHeiphenatedBetweenTwoLines);
-if (test13result.SearchTerm == "the") {
+if (test14result.Results.length == 1) {
     console.log("PASS: Test 14");
 } else {
     console.log("FAIL: Test 14");
-    console.log("Expected: the");
-    console.log("Received:", test14result.SearchTerm);
+    console.log("Expected:", 1);
+    console.log("Received:", test14result.Results.length);
 }
