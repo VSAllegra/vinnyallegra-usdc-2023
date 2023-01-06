@@ -46,7 +46,7 @@
         for (let j= 0; j < content.length; j++){
             let entry = content[j];
             let containsSearchTerm = entry.Text.match(searchTermRE);
-            /** Only Include Results Containing a Match */
+          
             if(containsSearchTerm){
                 result.Results.push({
                     ISBN: book.ISBN,
@@ -55,24 +55,30 @@
                 });
             } else {
                 let heiphenCheck = content[j].Text.match(endHeiphenatedRE)
-                if(heiphenCheck){
-                    /** Assume If there is a heiphen that book 
-                     * contents are sorted by line and then by page 
-                     * such that the next entry will be the continuation of the heiphen*/
-                    if(j + 1 < content.length){
-                        let nextLine = content[
-                            j+1].Text.match(startLineRE);
-                        /** Replace the heiphen from the last line with the start of the next 
-                         * to make 1 word*/
-                        let combinedWord = heiphenCheck[0].replace("-", nextLine[0]);
-                        if(combinedWord == searchTerm){
-                            result.Results.push({
-                                ISBN: book.ISBN,
-                                Page: entry.Page,
-                                Line: entry.Line,
-                            });
-                        }
-                    }
+
+                if(!heiphenCheck) continue;
+
+                /** The Completion of the Heiphen Expression Should be the start
+                * of the next line (next entry) in the conten */
+                if(j + 1 > content.length) continue;
+
+                let nextLine = content[
+                    j+1].Text.match(startLineRE)
+                    
+                /** A Heiphenated Expression should be followed by the completion of the
+                * Expression on the next entry of the content*/
+                console.assert(nextLine.length > 0, 
+                    "Word-Characters Missing Following Heiphenated Expression"); 
+
+                
+                let combinedWord = heiphenCheck[0].replace("-", nextLine[0]);
+                if(combinedWord == searchTerm){
+                    result.Results.push({
+                        ISBN: book.ISBN,
+                        Page: entry.Page,
+                        Line: entry.Line,
+                    });
+
                 }
             }
             
